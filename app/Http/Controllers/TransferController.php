@@ -113,7 +113,7 @@ class TransferController extends Controller
             'guichetier_provenance' => 'required|string|max:255',
             'guichetier_destination' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
-           
+
         ]);
 
         try {
@@ -132,12 +132,37 @@ class TransferController extends Controller
 
 
 
-// ADD THIS MISSING EDIT METHOD
+    // ADD THIS MISSING EDIT METHOD
     public function edit($id)
     {
         $transfer = Transfer::where('created_by', auth()->id())->findOrFail($id);
         return view('user1.edit', compact('transfer'));
     }
+
+
+
+
+
+
+
+    public function confirmTransfer($id, Request $request)
+    {
+        $transfer = Transfer::findOrFail($id);
+        $action = $request->get('action');
+
+        if ($action === 'approve') {
+            $transfer->status = 'Confirmed';
+            $transfer->save();
+            return redirect()->route('user2.dashboard')->with('success', 'Transfer approved successfully.');
+        } elseif ($action === 'reject') {
+            $transfer->status = 'Cancelled';
+            $transfer->save();
+            return redirect()->route('user2.dashboard')->with('success', 'Transfer rejected successfully.');
+        }
+
+        return redirect()->route('user2.dashboard')->with('error', 'Invalid action.');
+    }
+
 
 
 

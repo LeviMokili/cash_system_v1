@@ -10,38 +10,32 @@ use Illuminate\Support\Facades\Auth;
 
 class User1DashboardController extends Controller
 {
+
     public function index()
     {
-        $user = Auth::user();
-        $userId = $user->id;
-        $today = Carbon::today()->toDateString();
+        // ...existing code...
 
-        $stats = [
-            'totalToday' => Transfer::where('created_by', $userId)
-                ->whereDate('created_at', $today)
-                ->count(),
+    $today = Carbon::today()->toDateString();
+    $userId = auth()->id();
 
-            'pendingCount' => Transfer::where('created_by', $userId)
-                ->where('status', 'Pending')
-                ->count(),
+       
+        // existing stats (example)
+      $stats['totalToday'] = Transfer::where('created_by', $userId)
+        ->whereDate('date_transfer', $today)
+        ->count();
 
-            'confirmedCount' => Transfer::where('created_by', $userId)
-                ->where('status', 'Confirmed')
-                ->count(),
+    $stats['pendingCount'] = Transfer::where('created_by', $userId)->where('status', 'pending')->count();
+    $stats['confirmedCount'] = Transfer::where('created_by', $userId)->where('status', 'confirmed')->count();
+    $stats['cancelledCount'] = Transfer::where('created_by', $userId)->where('status', 'cancelled')->count();
 
-            'cancelledCount' => Transfer::where('created_by', $userId)
-                ->where('status', 'Cancelled')
-                ->count(),
-        ];
+    $recentTransfers = Transfer::where('created_by', $userId)
+        ->orderBy('date_transfer', 'desc')
+        ->take(10)
+        ->get();
 
-        $recentTransfers = Transfer::where('created_by', $userId)
-            ->orderBy('created_at', 'desc')
-            ->limit(50) // Increased for DataTable
-            ->get();
 
         return view('user1.dashboard', compact('stats', 'recentTransfers'));
     }
-
     // API endpoint for DataTable (if using server-side processing)
     public function getTransfersData(Request $request)
     {

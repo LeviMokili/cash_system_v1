@@ -42,9 +42,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/transfers/create', [TransferController::class, 'create'])->name('transfers.create');
         Route::post('/transfers', [TransferController::class, 'store'])->name('transfers.store');
         Route::get('/transfers', [TransferController::class, 'index'])->name('transfers.index');
-     
 
-          // Edit/Update Routes - FIXED (added PUT method and show route)
+
+        // Edit/Update Routes - FIXED (added PUT method and show route)
         Route::get('/transfers/{transfer}/edit', [TransferController::class, 'edit'])->name('transfers.edit');
         Route::put('/transfers/{transfer}', [TransferController::class, 'update'])->name('transfers.update');
         Route::get('/transfers/{transfer}', [TransferController::class, 'show'])->name('transfers.show');
@@ -55,5 +55,7 @@ Route::middleware(['auth'])->group(function () {
     // User2 Routes
     Route::prefix('user2')->middleware('user2')->group(function () {
         Route::get('/dashboard', [User2DashboardController::class, 'index'])->name('user2.dashboard');
+        Route::get('/transfers/confirm/{id}', [TransferController::class, 'confirmTransfer'])->name('transfers.confirm');
+        Route::get('/transfers/print/{id}', [TransferController::class, 'printTransfer'])->name('transfers.print');
     });
 });

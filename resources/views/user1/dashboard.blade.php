@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
     :root {
@@ -448,20 +449,19 @@
                 <td>{{ $transfer->ville_provenance }}</td>
                 <td>{{ $transfer->ville_destination }}</td>
                 <td>
-                  <span class="status {{ strtolower($transfer->status) }} bn-success">
+                  <span class="status {{ strtolower($transfer->status) }} ">
                     {{ ucfirst($transfer->status) }}
                   </span>
                 </td>
                 <td>
                   <div class="btn-group">
                     <a href="{{ route('transfers.edit', $transfer->id) }}" class="btn-edit"
-                      style="background: none; border: none; color: var(--warning); cursor: pointer; margin-left: 8px; text-decoration: none;"
-                      title="Edit">Edit
-                      <i class="fas fa-edit"></i>
+                      
+                      title="Edit">
+                     <i class="fa-solid fa-pencil"></i>
                     </a>
-                    <a href="{{ route('transfers.show', $transfer->id) }}" class="btn-view"
-                      style="background: none; border: none; color: var(--primary); cursor: pointer; margin-left: 8px; text-decoration: none;"
-                      title="View Details">Show
+                    <a href="{{ route('transfers.show', $transfer->id) }}" class="btn-view "
+                      title="View Details" style="margin-left:5px">
                       <i class="fas fa-eye"></i>
                     </a>
 
