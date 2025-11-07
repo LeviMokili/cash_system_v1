@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -33,6 +34,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
     /**
      * The attributes that should be cast.
      *
@@ -42,4 +44,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+
+    // Role checking methods
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isUser1()
+    {
+        return $this->role === 'user1';
+    }
+
+    public function isUser2()
+    {
+        return $this->role === 'user2';
+    }
+
+    // Relationship with transfers created by this user
+    public function transfers()
+    {
+        return $this->hasMany(Transfer::class, 'created_by');
+    }
 }

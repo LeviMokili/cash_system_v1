@@ -1,0 +1,408 @@
+/* ==============================
+   CASH TRANSFER SYSTEM - LOGIN DESIGN
+   File: assets/style.css
+   ============================== */
+
+/* ==== RESET DEFAULTS ==== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", Arial, sans-serif;
+}
+
+/* ==== BODY STYLING ==== */
+body {
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Optional background overlay effect */
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    z-index: 0;
+}
+
+/* ==== LOGIN CONTAINER ==== */
+.login-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.login-container h2 {
+    color: #ffffff;
+    margin-bottom: 25px;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* ==== LOGIN CARD (FORM) ==== */
+form {
+    background: #ffffff;
+    padding: 40px 35px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ==== LABELS ==== */
+label {
+    display: block;
+    font-weight: 600;
+    margin-top: 18px;
+    color: #333;
+    font-size: 14px;
+}
+
+/* ==== INPUTS ==== */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    margin-top: 6px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 8px rgba(25, 118, 210, 0.4);
+    outline: none;
+}
+
+/* Dropdown styling */
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 8px;
+    font-size: 15px;
+    background-color: #fff;
+    transition: border-color 0.3s ease-in-out;
+}
+
+select:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 6px rgba(25, 118, 210, 0.3);
+    outline: none;
+}
+
+
+/* ==== BUTTON ==== */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 25px;
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #0d47a1, #002171);
+    transform: scale(1.02);
+}
+
+/* Remember Me & Forgot Password section */
+.extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.extras label {
+    color: #333;
+    font-weight: 500;
+}
+
+.extras .forgot {
+    color: #1976d2;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.extras .forgot:hover {
+    color: #0d47a1;
+    text-decoration: underline;
+}
+/* Error box inside login form */
+.error-box {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #e57373;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Smooth error fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ==== ERROR MESSAGE ==== */
+p[style*="color:red"] {
+    background: #ffebee;
+    color: #c62828 !important;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* ==== SMALL SCREEN OPTIMIZATION ==== */
+@media (max-width: 768px) {
+    .login-container h2 {
+        font-size: 1.8rem;
+    }
+    form {
+        padding: 30px 25px;
+        max-width: 350px;
+    }
+    input[type="text"], input[type="password"] {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 20px;
+        background: linear-gradient(160deg, #1565c0, #1976d2);
+    }
+
+    .login-container h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    form {
+        width: 100%;
+        padding: 25px 20px;
+        border-radius: 12px;
+    }
+
+    button {
+        font-size: 15px;
+        padding: 10px;
+    }
+}
+
+/* ==== ULTRA-WIDE DISPLAY OPTIMIZATION ==== */
+@media (min-width: 1400px) {
+    .login-container h2 {
+        font-size: 2.5rem;
+    }
+
+    form {
+        max-width: 450px;
+        padding: 45px 40px;
+    }
+}
+
+.dashboard-container {
+    background: #fff;
+    width: 95%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.dashboard-container h2 {
+    text-align: center;
+    color: #0d47a1;
+    margin-bottom: 20px;
+}
+
+.dashboard-container form label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-top: 12px;
+}
+
+.dashboard-container input[type="text"],
+.dashboard-container input[type="date"],
+.dashboard-container input[type="number"],
+.dashboard-container input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+}
+
+.dashboard-container input:focus {
+    border-color: #1976d2;
+    outline: none;
+}
+
+.dashboard-container button {
+    margin-top: 25px;
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dashboard-container button:hover {
+    background: #0d47a1;
+}
+
+/* Success & Error messages */
+.success-box {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.error-box {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #e57373;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: #1976d2;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .dashboard-container {
+        padding: 20px;
+    }
+}
+
+.dashboard-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-actions a {
+  margin-left: 10px;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-table th, .dashboard-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.dashboard-table th {
+  background: #007bff;
+  color: white;
+}
+
+.status.pending {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.status.completed {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.status.rejected {
+  color: #f44336;
+  font-weight: bold;
+}
