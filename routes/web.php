@@ -29,9 +29,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Admin Routes
-    Route::prefix('admin')->middleware('admin')->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    });
+    // In routes/web.php
+Route::prefix('admin')->middleware('admin')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/manage-users', [AdminDashboardController::class, 'index'])->name('admin.users.index');
+    Route::get('/view-logs', [AdminDashboardController::class, 'index'])->name('admin.logs.index');
+    Route::get('/manage-transfers', [TransferController::class, 'index'])->name('admin.transfers.index');
+    Route::get('/settings', [AdminDashboardController::class, 'settings'])->name('admin.settings');
+});
 
     // User1 Routes
     Route::prefix('user1')->middleware('user1')->group(function () {
@@ -56,6 +61,6 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('user2')->middleware('user2')->group(function () {
         Route::get('/dashboard', [User2DashboardController::class, 'index'])->name('user2.dashboard');
         Route::get('/transfers/confirm/{id}', [TransferController::class, 'confirmTransfer'])->name('transfers.confirm');
-         Route::get('/transfers/print/{id}', [TransferController::class, 'printTransfer'])->name('transfers.print');
+        Route::get('/transfers/print/{id}', [TransferController::class, 'printTransfer'])->name('transfers.print');
     });
 });

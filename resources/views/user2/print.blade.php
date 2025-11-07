@@ -293,6 +293,12 @@
                 <div class="detail-label">Amount</div>
                 <div class="detail-value amount-value">${{ number_format( $transfer->amount , 2)}}</div>
             </div>
+
+             <div class="detail-row">
+                <div class="detail-label">Status</div>
+                <div class="detail-value">{{ $transfer->status }}</div>
+            </div>
+            
             
             <!-- Signature field - only visible when printing -->
             <div class="signature-field" style="heght: 80px;">

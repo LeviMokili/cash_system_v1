@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Create Transfer - Cash Transfer System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.4/build/css/intlTelInput.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <style>
@@ -16,7 +18,7 @@
             --success: #16a34a;
             --error: #dc2626;
             --radius: 0px;
-            --shadow: 0 6px 16px rgba(0,0,0,0.08);
+            --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
         }
 
         * {
@@ -87,7 +89,8 @@
             cursor: not-allowed;
         }
 
-        .success, .error {
+        .success,
+        .error {
             grid-column: span 2;
             padding: 1rem;
             border-radius: var(--radius);
@@ -160,6 +163,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>💸 New Cash Transfer Entry</h2>
@@ -177,9 +181,8 @@
 
             <div>
                 <label for="date_transfer">Transfer Date</label>
-                <input id="date_transfer" name="date_transfer" type="date" 
-                       value="{{ old('date_transfer', date('Y-m-d')) }}" required
-                       onchange="generateReferenceCode()">
+                <input id="date_transfer" name="date_transfer" type="date"
+                    value="{{ old('date_transfer', date('Y-m-d')) }}" required onchange="generateReferenceCode()">
                 @error('date_transfer')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -187,8 +190,8 @@
 
             <div>
                 <label for="reference_code">Reference Code</label>
-                <input id="reference_code" name="reference_code " type="text" 
-                       value="{{ old('reference_code') }}" readonly required>
+                <input id="reference_code" name="reference_code " type="text" value="{{ old('reference_code') }}"
+                    readonly required>
                 @error('reference_code')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -196,8 +199,7 @@
 
             <div>
                 <label for="sender_name">Sender Name</label>
-                <input id="sender_name" name="sender_name" type="text" 
-                       value="{{ old('sender_name') }}" required>
+                <input id="sender_name" name="sender_name" type="text" value="{{ old('sender_name') }}" required>
                 @error('sender_name')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -205,8 +207,7 @@
 
             <div>
                 <label for="receiver_name">Receiver Name</label>
-                <input id="receiver_name" name="receiver_name" type="text" 
-                       value="{{ old('receiver_name') }}" required>
+                <input id="receiver_name" name="receiver_name" type="text" value="{{ old('receiver_name') }}" required>
                 @error('receiver_name')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -214,8 +215,8 @@
 
             <div>
                 <label for="ville_provenance">Ville de Provenance</label>
-                <input id="ville_provenance" name="ville_provenance" type="text" 
-                       value="{{ old('ville_provenance') }}" required>
+                <input id="ville_provenance" name="ville_provenance" type="text" value="{{ old('ville_provenance') }}"
+                    required>
                 @error('ville_provenance')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -223,8 +224,8 @@
 
             <div>
                 <label for="ville_destination">Ville de Destination</label>
-                <input id="ville_destination" name="ville_destination" type="text" 
-                       value="{{ old('ville_destination') }}" required>
+                <input id="ville_destination" name="ville_destination" type="text"
+                    value="{{ old('ville_destination') }}" required>
                 @error('ville_destination')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -232,8 +233,8 @@
 
             <div>
                 <label for="guichetier_provenance">Guichetier Provenance</label>
-                <input id="guichetier_provenance" name="guichetier_provenance" type="text" 
-                       value="{{ old('guichetier_provenance') }}" required>
+                <input id="guichetier_provenance" name="guichetier_provenance" type="text"
+                    value="{{ old('guichetier_provenance') }}" required>
                 @error('guichetier_provenance')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -241,17 +242,23 @@
 
             <div>
                 <label for="guichetier_destination">Guichetier Destination</label>
-                <input id="guichetier_destination" name="guichetier_destination" type="text" 
-                       value="{{ old('guichetier_destination') }}" required>
+                <input id="guichetier_destination" name="guichetier_destination" type="text"
+                    value="{{ old('guichetier_destination') }}" required>
                 @error('guichetier_destination')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
             </div>
 
+           
+
+            <div class="full">
+              <input type="tel" id="phone" class="phone-input" placeholder="Enter your phone number" >
+            </div>
+
+
             <div class="full">
                 <label for="amount">Amount (UGX)</label>
-                <input id="amount" name="amount" type="number" step="0.01" min="0" 
-                       value="{{ old('amount') }}" required>
+                <input id="amount" name="amount" type="number" step="0.01" min="0" value="{{ old('amount') }}" required>
                 @error('amount')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -263,18 +270,134 @@
         </form>
 
         <a class="back" href="">← Back to Dashboard</a>
+
+
+        
+
     </div>
 
+
+
+    
+
+
+    <script>
+        $(document).ready(function() {
+            // Initialize intl-tel-input
+            const phoneInput = document.querySelector("#phone");
+            const iti = window.intlTelInput(phoneInput, {
+                initialCountry: "no",
+                preferredCountries: ["no", "us", "gb", "de", "fr", "se"],
+                separateDialCode: true,
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+            });
+            
+            // Update phone info when country changes
+            phoneInput.addEventListener("countrychange", function() {
+                updatePhoneInfo();
+            });
+            
+            // Update phone info when input changes
+            $(phoneInput).on('input', function() {
+                updatePhoneInfo();
+                validatePhone();
+            });
+            
+            // Function to update phone information
+            function updatePhoneInfo() {
+                const countryData = iti.getSelectedCountryData();
+                const isValid = iti.isValidNumber();
+                
+                let infoText = `Country: ${countryData.name} (${iti.getSelectedDialCode()})`;
+                
+                if (isValid) {
+                    const number = iti.getNumber();
+                    infoText += ` | Valid: Yes | Format: ${number}`;
+                    $('#phoneInfo').css('color', '#27ae60');
+                } else {
+                    infoText += ' | Valid: No';
+                    $('#phoneInfo').css('color', '#e74c3c');
+                }
+                
+                $('#phoneInfo').text(infoText);
+            }
+            
+            // Function to validate phone number
+          
+            
+            // Initialize jQuery Validation
+            $('#phoneForm').validate({
+                rules: {
+                    phone: {
+                        required: true,
+                        // Custom validation using intl-tel-input
+                        validatePhone: true
+                    }
+                },
+                messages: {
+                    phone: {
+                        required: "Please enter a phone number",
+                        validatePhone: "Please enter a valid phone number"
+                    }
+                },
+                errorElement: 'div',
+                errorClass: 'error',
+                errorPlacement: function(error, element) {
+                    error.appendTo($('#phoneError'));
+                },
+                submitHandler: function(form) {
+                    if (validatePhone()) {
+                        const phoneNumber = iti.getNumber();
+                        
+                        // Show success message with animation
+                        $('#successMessage').fadeIn(300);
+                        
+                        // Reset form after 3 seconds
+                        setTimeout(function() {
+                            $('#successMessage').fadeOut(300);
+                            form.reset();
+                            iti.setCountry('no');
+                            updatePhoneInfo();
+                        }, 3000);
+                        
+                        // In a real application, you would submit the form data here
+                        console.log(`Phone number submitted: ${phoneNumber}`);
+                    }
+                    return false;
+                }
+            });
+            
+            // Add custom validation method for phone
+            $.validator.addMethod("validatePhone", function(value, element) {
+                return iti.isValidNumber();
+            }, "Please enter a valid phone number");
+            
+            // Initialize tooltips using jQuery UI
+            $('.tooltip').tooltip({
+                track: true
+            });
+            
+            // Add animation to the submit button
+            $('#submitBtn').on('mouseenter', function() {
+                $(this).addClass('ui-state-hover');
+            }).on('mouseleave', function() {
+                $(this).removeClass('ui-state-hover');
+            });
+            
+            // Initialize phone info
+            updatePhoneInfo();
+        });
+    </script>
     <script>
         // Generate reference code when page loads and when date changes
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             generateReferenceCode();
         });
 
         function generateReferenceCode() {
             const dateInput = document.getElementById('date_transfer');
             const referenceInput = document.getElementById('reference_code');
-            
+
             if (!dateInput.value) {
                 referenceInput.value = '';
                 return;
@@ -282,25 +405,33 @@
 
             // Show loading state
             referenceInput.classList.add('loading');
-            
+
             fetch('{{ route("transfers.get-reference") }}?date=' + dateInput.value, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                referenceInput.value = data.reference_code;
-                referenceInput.classList.remove('loading');
-            })
-            .catch(error => {
-                console.error('Error generating reference code:', error);
-                referenceInput.classList.remove('loading');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    referenceInput.value = data.reference_code;
+                    referenceInput.classList.remove('loading');
+                })
+                .catch(error => {
+                    console.error('Error generating reference code:', error);
+                    referenceInput.classList.remove('loading');
+                });
         }
 
-        
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.4/build/js/intlTelInput.min.js"></script>
+    <script>
+        const input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.4/build/js/utils.js"),
+        });
     </script>
 </body>
+
 </html>
