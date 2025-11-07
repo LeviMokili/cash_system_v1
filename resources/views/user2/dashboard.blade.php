@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>User2 Dashboard - Confirm Transfers</title>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         /* === General Layout === */
@@ -22,7 +25,7 @@
             background: #fff;
             border-radius: 12px;
             padding: 30px 40px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         /* === Header === */
@@ -65,7 +68,7 @@
             border-radius: 10px;
             text-align: center;
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s;
         }
 
@@ -104,10 +107,11 @@
             background: #fff;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
         }
 
-        .dashboard-table th, .dashboard-table td {
+        .dashboard-table th,
+        .dashboard-table td {
             padding: 12px 15px;
             border-bottom: 1px solid #e0e0e0;
             text-align: left;
@@ -150,7 +154,9 @@
         }
 
         /* === Buttons === */
-        .btn-success, .btn-danger, .btn-print {
+        .btn-success,
+        .btn-danger,
+        .btn-print {
             text-decoration: none;
             padding: 6px 12px;
             border-radius: 6px;
@@ -193,10 +199,15 @@
                 align-items: flex-start;
                 gap: 10px;
             }
-            .dashboard-table th, .dashboard-table td {
+
+            .dashboard-table th,
+            .dashboard-table td {
                 font-size: 13px;
             }
-            .btn-success, .btn-danger, .btn-print {
+
+            .btn-success,
+            .btn-danger,
+            .btn-print {
                 padding: 5px 8px;
                 font-size: 12px;
             }
@@ -221,6 +232,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Header -->
@@ -229,7 +241,8 @@
             <div class="header-actions">
                 <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                     @csrf
-                    <button type="submit" style="background: #f44336; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.3s;">
+                    <button type="submit"
+                        style="background: #f44336; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.3s;">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </button>
                 </form>
@@ -293,8 +306,10 @@
                                 <td>{{ $transfer->ville_provenance }}</td>
                                 <td>{{ $transfer->ville_destination }}</td>
                                 <td>
-                                    <a href="{{ route('transfers.confirm', ['id' => $transfer->id, 'action' => 'approve']) }}" clea>✔ Approve</a>
-                                    <a href="{{ route('transfers.confirm', ['id' => $transfer->id, 'action' => 'reject']) }}" class="btn-danger">✖ Reject</a>
+                                    <a href="{{ route('transfers.confirm', ['id' => $transfer->id, 'action' => 'approve']) }}"
+                                        clea>✔ Approve</a>
+                                    <a href="{{ route('transfers.confirm', ['id' => $transfer->id, 'action' => 'reject']) }}"
+                                        class="btn-danger">✖ Reject</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -330,7 +345,8 @@
                                 <td><span class="status {{ $transfer->status }}">{{ $transfer->status }}</span></td>
                                 <td>
                                     @if($transfer->status === 'Confirmed')
-                                        <a href="{{ route('transfers.print', $transfer->id) }}" target="_blank" class="btn-print">🖨️ Print</a>
+                                        <a href="{{ route('transfers.print', $transfer->id) }}" target="_blank"
+                                            class="btn-print">🖨️ Print</a>
                                     @endif
                                 </td>
                             </tr>
@@ -343,4 +359,5 @@
         </section>
     </div>
 </body>
+
 </html>

@@ -88,6 +88,9 @@ class TransferController extends Controller
         return view('user1.transfers.index', compact('transfers'));
     }
 
+
+
+    //USER 1
     public function show($id)
     {
         $transfer = Transfer::where('created_by', auth()->id())->findOrFail($id);
@@ -166,4 +169,14 @@ class TransferController extends Controller
 
 
 
+
+    //USER TWO
+     public function printTransfer($id)
+    {
+        $transfer = Transfer::where('id', $id)
+            ->where('status', 'Confirmed')
+            ->firstOrFail();
+
+        return view('user2.print', compact('transfer'));
+    }
 }

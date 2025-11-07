@@ -56,6 +56,6 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('user2')->middleware('user2')->group(function () {
         Route::get('/dashboard', [User2DashboardController::class, 'index'])->name('user2.dashboard');
         Route::get('/transfers/confirm/{id}', [TransferController::class, 'confirmTransfer'])->name('transfers.confirm');
-        Route::get('/transfers/print/{id}', [TransferController::class, 'printTransfer'])->name('transfers.print');
+         Route::get('/transfers/print/{id}', [TransferController::class, 'printTransfer'])->name('transfers.print');
     });
 });
