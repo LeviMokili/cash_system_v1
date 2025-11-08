@@ -36,6 +36,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/view-logs', [AdminDashboardController::class, 'index'])->name('admin.logs.index');
     Route::get('/manage-transfers', [TransferController::class, 'index'])->name('admin.transfers.index');
     Route::get('/settings', [AdminDashboardController::class, 'settings'])->name('admin.settings');
+    Route::get('/admin/dashboard/filter-data', [AdminDashboardController::class, 'getFilterData'])->name('admin.dashboard.filter-data');
 });
 
     // User1 Routes

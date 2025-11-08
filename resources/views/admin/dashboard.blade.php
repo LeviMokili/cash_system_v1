@@ -8,10 +8,104 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <script src="https://kit.fontawesome.com/a2d9d5a64b.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-filters {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .filter-section h4 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-group select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            min-width: 150px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #495057;
+            min-width: 80px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .no-chart-message {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 18px;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                justify-content: space-between;
+            }
+            
+            .filter-group select {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="admin-layout">
-        <!-- Sidebar (unchanged) -->
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2><i class="fas fa-coins"></i> Admin</h2>
@@ -38,8 +132,7 @@
             <header class="admin-header">
                 <h2>Welcome, {{ auth()->user()->name }} (Administrator)</h2>
             </header>
-
-            <!-- Summary Widgets (unchanged) -->
+             <!-- Summary Widgets (unchanged) -->
             <section class="summary-widgets">
                 <div class="widget total">
                     <h3>{{ $totalTransfers }}</h3>
@@ -67,28 +160,110 @@
                 </div>
             </section>
 
-            <!-- Chart Section with Filters -->
-            <section class="chart-container">
-                <div class="chart-header">
-                    <h3>Transfer Analytics</h3>
-                    <div class="chart-filters">
-                        <form method="GET" action="{{ route('admin.dashboard') }}" class="period-filter">
-                            <button type="submit" name="period" value="weekly" class="filter-btn {{ $period == 'weekly' ? 'active' : '' }}">
-                                <i class="fas fa-calendar-week"></i> Weekly
-                            </button>
-                            <button type="submit" name="period" value="monthly" class="filter-btn {{ $period == 'monthly' ? 'active' : '' }}">
-                                <i class="fas fa-calendar-alt"></i> Monthly
-                            </button>
-                            <button type="submit" name="period" value="yearly" class="filter-btn {{ $period == 'yearly' ? 'active' : '' }}">
-                                <i class="fas fa-calendar"></i> Yearly
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                <canvas id="transferChart" height="120"></canvas>
+            <!-- Summary Widgets -->
+            <section class="summary-widgets">
+                <!-- Your existing widgets -->
             </section>
 
-            <!-- Recent Transfers (unchanged) -->
+            <!-- Chart Filters -->
+            <div class="chart-filters">
+                <form method="GET" action="{{ route('admin.dashboard') }}" class="period-filter-form">
+                    <!-- Period Type Selection -->
+                    <div class="filter-section">
+                        <h4>📊 Select Chart Type:</h4>
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label>Period Type:</label>
+                                <select name="period" onchange="this.form.submit()">
+                                    <option value="">Select Period Type</option>
+                                    <option value="daily" {{ $period == 'daily' ? 'selected' : '' }}>Daily View</option>
+                                    <option value="weekly" {{ $period == 'weekly' ? 'selected' : '' }}>Weekly View</option>
+                                    <option value="monthly" {{ $period == 'monthly' ? 'selected' : '' }}>Monthly View</option>
+                                    <option value="yearly" {{ $period == 'yearly' ? 'selected' : '' }}>Yearly View</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Filters Based on Period Type -->
+                    @if($period)
+                        <div class="filter-section">
+                            <h4>🎯 Select Time Period:</h4>
+                            <div class="filter-row">
+                                <!-- Year Selection (Required for all types) -->
+                                <div class="filter-group">
+                                    <label>Year:</label>
+                                    <select name="year" onchange="this.form.submit()">
+                                        <option value="">Select Year</option>
+                                        @foreach($availableYears as $year)
+                                            <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }}>
+                                                {{ $year }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Month Selection (Required for Daily, Weekly, Monthly) -->
+                                @if(in_array($period, ['daily', 'weekly', 'monthly']) && $selectedYear)
+                                    <div class="filter-group">
+                                        <label>Month:</label>
+                                        <select name="month" onchange="this.form.submit()">
+                                            <option value="">Select Month</option>
+                                            @foreach($availableMonths as $monthNum => $monthName)
+                                                <option value="{{ $monthNum }}" {{ $selectedMonth == $monthNum ? 'selected' : '' }}>
+                                                    {{ $monthName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
+
+                                <!-- Week Selection (Required for Weekly only) -->
+                                @if($period == 'weekly' && $selectedYear && $selectedMonth)
+                                    <div class="filter-group">
+                                        <label>Week:</label>
+                                        <select name="week" onchange="this.form.submit()">
+                                            <option value="">Select Week</option>
+                                            @foreach($availableWeeks as $week)
+                                                <option value="{{ $week }}" {{ $selectedWeek == $week ? 'selected' : '' }}>
+                                                    Week {{ $week }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                </form>
+            </div>
+
+            <!-- Chart Container -->
+            <section class="chart-container">
+                <h3>{{ $chartTitle }}</h3>
+                
+                @if($showChart)
+                    <canvas id="transferChart" height="120"></canvas>
+                @else
+                    <div class="chart-placeholder">
+                        <div class="no-chart-message">
+                            <i class="fas fa-chart-bar" style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;"></i>
+                            <p>Please select the required filters above to view the chart</p>
+                            @if($period == 'daily')
+                                <small>Required: Year + Month</small>
+                            @elseif($period == 'weekly')
+                                <small>Required: Year + Month + Week</small>
+                            @elseif($period == 'monthly')
+                                <small>Required: Year + Month</small>
+                            @elseif($period == 'yearly')
+                                <small>Required: Year</small>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </section>
+
+              <!-- Recent Transfers (unchanged) -->
             <section class="dashboard-content">
                 <h3>Recent Transfers</h3>
                 <table class="dashboard-table">
@@ -121,7 +296,7 @@
                 </table>
             </section>
 
-            <!-- Recent Logs (unchanged) -->
+<!-- Recent Logs (unchanged) -->
             <section class="dashboard-content">
                 <h3>Recent Activities</h3>
                 <table class="dashboard-table">
@@ -152,38 +327,20 @@
         </main>
     </div>
 
+    @if($showChart)
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const ctx = document.getElementById('transferChart');
             if (!ctx) return;
 
-            const months = @json($months);
-            const amounts = @json($amounts);
-            const period = @json($period);
-
-            // Determine chart title based on period
-            let chartTitle = 'Transfer Amount (USD)';
-            let xAxisTitle = 'Period';
-            
-            switch(period) {
-                case 'weekly':
-                    chartTitle = 'Weekly Transfer Amount (Last 12 Weeks)';
-                    xAxisTitle = 'Weeks';
-                    break;
-                case 'monthly':
-                    chartTitle = 'Monthly Transfer Amount (Last 6 Months)';
-                    xAxisTitle = 'Months';
-                    break;
-                case 'yearly':
-                    chartTitle = 'Yearly Transfer Amount (Last 5 Years)';
-                    xAxisTitle = 'Years';
-                    break;
-            }
+            const labels = @json($labels ?? []);
+            const amounts = @json($amounts ?? []);
+            const chartTitle = @json($chartTitle ?? 'Transfer Analytics');
 
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: months,
+                    labels: labels,
                     datasets: [{
                         label: 'Transfer Amount (USD)',
                         data: amounts,
@@ -217,7 +374,7 @@
                         x: {
                             title: {
                                 display: true,
-                                text: xAxisTitle
+                                text: 'Period'
                             }
                         }
                     }
@@ -225,5 +382,6 @@
             });
         });
     </script>
+    @endif
 </body>
 </html>
