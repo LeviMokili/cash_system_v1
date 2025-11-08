@@ -27,6 +27,7 @@ class TransferController extends Controller
             'guichetier_provenance' => 'required|string|max:255',
             'guichetier_destination' => 'required|string|max:255',
             'date_transfer' => 'required|date',
+            'telephone' => 'required|string|max:20',
         ]);
 
         $referenceCode = $this->generateReferenceCode($validated['date_transfer']);
@@ -40,6 +41,7 @@ class TransferController extends Controller
             'guichetier_provenance' => $validated['guichetier_provenance'],
             'guichetier_destination' => $validated['guichetier_destination'],
             'date_transfer' => $validated['date_transfer'],
+            'telephone' => $validated['telephone'],
             'status' => 'Pending',
             'created_by' => auth()->id(),
         ]);

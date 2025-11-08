@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('guichetier_provenance');
             $table->string('guichetier_destination');
             $table->date('date_transfer');
+            $table->string('telephone');
             $table->enum('status', ['Pending', 'Confirmed', 'Cancelled'])->default('Pending');
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->timestamps();

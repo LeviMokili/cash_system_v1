@@ -89,7 +89,7 @@ class AdminDashboardController extends Controller
 
     private function hasRequiredFilters($period, $year, $month, $week)
     {
-        return match($period) {
+        return match ($period) {
             'daily' => !empty($year) && !empty($month),
             'weekly' => !empty($year) && !empty($month) && !empty($week),
             'monthly' => !empty($year) && !empty($month),
@@ -127,13 +127,20 @@ class AdminDashboardController extends Controller
 
     private function getAvailableWeeks($year, $month)
     {
-        return Transfer::select(DB::raw('WEEK(date_transfer, 1) as week_number'))
-            ->whereYear('date_transfer', $year)
+        // Get transfers and calculate week of month
+        $transfers = Transfer::whereYear('date_transfer', $year)
             ->whereMonth('date_transfer', $month)
-            ->distinct()
-            ->orderBy('week_number')
-            ->pluck('week_number')
-            ->toArray();
+            ->get();
+
+        $weeks = [];
+
+        foreach ($transfers as $transfer) {
+            $day = $transfer->date_transfer->day;
+            $weekOfMonth = ceil($day / 7);
+            $weeks[$weekOfMonth] = $weekOfMonth;
+        }
+
+        return array_values($weeks);
     }
 
     private function getChartData($period, $year, $month, $week)
@@ -159,10 +166,10 @@ class AdminDashboardController extends Controller
         $title = "Daily Transfers for {$start->format('F Y')}";
 
         $data = Transfer::select(
-                DB::raw('DAY(date_transfer) as day'),
-                DB::raw('DATE_FORMAT(date_transfer, "%b %d") as day_label'),
-                DB::raw('SUM(amount) as total_amount')
-            )
+            DB::raw('DAY(date_transfer) as day'),
+            DB::raw('DATE_FORMAT(date_transfer, "%b %d") as day_label'),
+            DB::raw('SUM(amount) as total_amount')
+        )
             ->whereYear('date_transfer', $year)
             ->whereMonth('date_transfer', $month)
             ->where('status', 'Confirmed')
@@ -175,8 +182,9 @@ class AdminDashboardController extends Controller
 
     private function getWeeklyData($year, $month, $week)
     {
+
         $start = Carbon::create($year, $month, 1);
-        $title = "Week $week Transfers for {$start->format('F Y')}";
+        $title = "Week $week (Month Week) Transfers for {$start->format('F Y')}"; // ← Changed here
 
         // Calculate start and end of the selected week
         $firstDayOfMonth = Carbon::create($year, $month, 1);
@@ -189,11 +197,11 @@ class AdminDashboardController extends Controller
         }
 
         $data = Transfer::select(
-                DB::raw('DATE(date_transfer) as date'),
-                DB::raw('DAY(date_transfer) as day'),
-                DB::raw('DATE_FORMAT(date_transfer, "%b %d") as day_label'),
-                DB::raw('SUM(amount) as total_amount')
-            )
+            DB::raw('DATE(date_transfer) as date'),
+            DB::raw('DAY(date_transfer) as day'),
+            DB::raw('DATE_FORMAT(date_transfer, "%b %d") as day_label'),
+            DB::raw('SUM(amount) as total_amount')
+        )
             ->whereBetween('date_transfer', [$startOfWeek, $endOfWeek])
             ->where('status', 'Confirmed')
             ->groupBy('date', 'day', 'day_label')
@@ -202,15 +210,15 @@ class AdminDashboardController extends Controller
 
         $labels = [];
         $amounts = [];
-        
+
         $current = $startOfWeek->copy();
         while ($current <= $endOfWeek) {
             $label = $current->format('M d');
             $dayData = $data->firstWhere('day', $current->day);
-            
+
             $labels[] = $label;
             $amounts[] = $dayData ? (float) $dayData->total_amount : 0;
-            
+
             $current->addDay();
         }
 
@@ -261,17 +269,17 @@ class AdminDashboardController extends Controller
     {
         $labels = [];
         $amounts = [];
-        
+
         $daysInMonth = $end->day;
-        
+
         // Create array for all days in month
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $currentDate = Carbon::create($start->year, $start->month, $day);
             $label = $currentDate->format('M d');
-            
+
             // Find data for this specific day
             $dayData = $data->firstWhere('day', $day);
-            
+
             $labels[] = $label;
             $amounts[] = $dayData ? (float) $dayData->total_amount : 0;
         }

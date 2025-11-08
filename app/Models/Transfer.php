@@ -20,6 +20,7 @@ class Transfer extends Model
         'guichetier_provenance',
         'guichetier_destination',
         'date_transfer',
+        'telephone',
         'status',
         'created_by'
     ];

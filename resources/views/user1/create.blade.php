@@ -77,6 +77,16 @@
             background-color: #f9fafb;
         }
 
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: #f9fafb;
+        }
+
         input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
@@ -214,18 +224,58 @@
             </div>
 
             <div>
+
+
                 <label for="ville_provenance">Ville de Provenance</label>
-                <input id="ville_provenance" name="ville_provenance" type="text" value="{{ old('ville_provenance') }}"
-                    required>
+                <select id="ville_provenance" name="ville_provenance">
+                    <option value="Butembo 1">Butembo 1</option>
+                    <option value="Butembo 2">Banana</option>
+                    <option value="Beni">Beni</option>
+                    <option value="Bunia">Bunia</option>
+                    <option value="Durba">Durba</option>
+                    <option value="Arua">Arua</option>
+                    <option value="Kisangani">Kisangani</option>
+                    <option value="Kinshasa">Kinshasa</option>
+                    <option value="Goma">Goma</option>
+                    <option value="Bukavu">Bukavu</option>
+                    <option value="Isiro">Isiro</option>
+                    <option value="Kampala">Kampala</option>
+                    <option value="Daresalam">Daresalam</option>
+                    <option value="Nairobi">Daresalam</option>
+                    <option value="China">China</option>
+                    <option value="Dubai">Dubai</option>
+                    <option value="India">India</option>
+                    <option value="Moku">Moku</option>
+                    <option value="Wanga">Moku</option>
+                </select>
                 @error('ville_provenance')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
             </div>
 
             <div>
-                <label for="ville_destination">Ville de Destination</label>
-                <input id="ville_destination" name="ville_destination" type="text"
-                    value="{{ old('ville_destination') }}" required>
+                <label for="ville_destination">Ville destination</label>
+                <select id="ville_destination" name="ville_destination">
+                    <option value="Butembo 1">Butembo 1</option>
+                    <option value="Butembo 2">Banana</option>
+                    <option value="Beni">Beni</option>
+                    <option value="Bunia">Bunia</option>
+                    <option value="Durba">Durba</option>
+                    <option value="Arua">Arua</option>
+                    <option value="Kisangani">Kisangani</option>
+                    <option value="Kinshasa">Kinshasa</option>
+                    <option value="Goma">Goma</option>
+                    <option value="Bukavu">Bukavu</option>
+                    <option value="Isiro">Isiro</option>
+                    <option value="Kampala">Kampala</option>
+                    <option value="Daresalam">Daresalam</option>
+                    <option value="Nairobi">Daresalam</option>
+                    <option value="China">China</option>
+                    <option value="Dubai">Dubai</option>
+                    <option value="India">India</option>
+                    <option value="Moku">Moku</option>
+                    <option value="Wanga">Moku</option>
+                </select>
                 @error('ville_destination')
                     <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -249,11 +299,18 @@
                 @enderror
             </div>
 
-           
-
             <div class="full">
-              <input type="tel" id="phone" class="phone-input" placeholder="Enter your phone number" >
+                <label for="telephone">Telehone</label>
+                <input id="telephone" name="telephone" type="tel" step="0.01" min="0" value="{{ old('telephone') }}"
+                    required>
+                @error('telephone')
+                    <span class="error-message">{{ $message }}</span>
+                @enderror
             </div>
+
+            <!-- <div class="full">
+              <input type="tel" id="phone" class="phone-input" placeholder="Enter your phone number" >
+            </div> -->
 
 
             <div class="full">
@@ -264,6 +321,7 @@
                 @enderror
             </div>
 
+
             <div class="full">
                 <button type="submit">💾 Save Transfer</button>
             </div>
@@ -272,17 +330,17 @@
         <a class="back" href="">← Back to Dashboard</a>
 
 
-        
+
 
     </div>
 
 
 
-    
+
 
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Initialize intl-tel-input
             const phoneInput = document.querySelector("#phone");
             const iti = window.intlTelInput(phoneInput, {
@@ -291,25 +349,25 @@
                 separateDialCode: true,
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
             });
-            
+
             // Update phone info when country changes
-            phoneInput.addEventListener("countrychange", function() {
+            phoneInput.addEventListener("countrychange", function () {
                 updatePhoneInfo();
             });
-            
+
             // Update phone info when input changes
-            $(phoneInput).on('input', function() {
+            $(phoneInput).on('input', function () {
                 updatePhoneInfo();
                 validatePhone();
             });
-            
+
             // Function to update phone information
             function updatePhoneInfo() {
                 const countryData = iti.getSelectedCountryData();
                 const isValid = iti.isValidNumber();
-                
+
                 let infoText = `Country: ${countryData.name} (${iti.getSelectedDialCode()})`;
-                
+
                 if (isValid) {
                     const number = iti.getNumber();
                     infoText += ` | Valid: Yes | Format: ${number}`;
@@ -318,13 +376,13 @@
                     infoText += ' | Valid: No';
                     $('#phoneInfo').css('color', '#e74c3c');
                 }
-                
+
                 $('#phoneInfo').text(infoText);
             }
-            
+
             // Function to validate phone number
-          
-            
+
+
             // Initialize jQuery Validation
             $('#phoneForm').validate({
                 rules: {
@@ -342,48 +400,34 @@
                 },
                 errorElement: 'div',
                 errorClass: 'error',
-                errorPlacement: function(error, element) {
+                errorPlacement: function (error, element) {
                     error.appendTo($('#phoneError'));
                 },
-                submitHandler: function(form) {
+                submitHandler: function (form) {
                     if (validatePhone()) {
                         const phoneNumber = iti.getNumber();
-                        
+
                         // Show success message with animation
                         $('#successMessage').fadeIn(300);
-                        
+
                         // Reset form after 3 seconds
-                        setTimeout(function() {
+                        setTimeout(function () {
                             $('#successMessage').fadeOut(300);
                             form.reset();
                             iti.setCountry('no');
                             updatePhoneInfo();
                         }, 3000);
-                        
+
                         // In a real application, you would submit the form data here
                         console.log(`Phone number submitted: ${phoneNumber}`);
                     }
                     return false;
                 }
             });
-            
-            // Add custom validation method for phone
-            $.validator.addMethod("validatePhone", function(value, element) {
-                return iti.isValidNumber();
-            }, "Please enter a valid phone number");
-            
-            // Initialize tooltips using jQuery UI
-            $('.tooltip').tooltip({
-                track: true
-            });
-            
-            // Add animation to the submit button
-            $('#submitBtn').on('mouseenter', function() {
-                $(this).addClass('ui-state-hover');
-            }).on('mouseleave', function() {
-                $(this).removeClass('ui-state-hover');
-            });
-            
+
+
+
+
             // Initialize phone info
             updatePhoneInfo();
         });
