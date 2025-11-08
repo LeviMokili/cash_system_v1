@@ -9,3 +9,4 @@
 
 
 <img width="1886" height="883" alt="Screenshot 2025-11-08 201414" src="https://github.com/user-attachments/assets/4d3349be-77eb-4385-896d-5bf44ac29c63" />
+<img width="1876" height="849" alt="Screenshot 2025-11-08 202540" src="https://github.com/user-attachments/assets/e1fb79cf-7ede-410f-a0df-c562c8861efd" />
